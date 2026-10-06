@@ -1,0 +1,43 @@
+pipeline {
+  agent any
+
+  environment {
+    AWS_REGION     = 'ap-northeast-2'
+    ECR_REPOSITORY = 'ai-travel-backend'
+    ECR_REGISTRY   = '123456789012.dkr.ecr.ap-northeast-2.amazonaws.com' // example account ID
+    IMAGE_TAG      = "${BUILD_NUMBER}"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('ECR Login') {
+      steps {
+        sh '''
+          aws ecr get-login-password --region "$AWS_REGION" \
+            | docker login --username AWS --password-stdin "$ECR_REGISTRY"
+        '''
+      }
+    }
+
+    stage('Docker Build') {
+      steps {
+        sh 'docker build -t "$ECR_REPOSITORY:$IMAGE_TAG" .'
+      }
+    }
+
+    stage('Tag & Push') {
+      steps {
+        sh '''
+          docker tag "$ECR_REPOSITORY:$IMAGE_TAG" \
+            "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        '''
+      }
+    }
+  }
+}

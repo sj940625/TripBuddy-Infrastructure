@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rds-to-external-backup
+spec:
+  schedule: "0 3 * * *"
+  timeZone: "Asia/Seoul"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup-worker
+              image: mariadb:10.11
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  mysqldump -h "$RDS_HOST" -u "$RDS_USER" -p"$RDS_PASSWORD" --single-transaction --quick "$RDS_DATABASE" \
+                  | mysql -h "$BACKUP_DB_HOST" -P "$BACKUP_DB_PORT" -u "$BACKUP_DB_USER" -p"$BACKUP_DB_PASSWORD" "$BACKUP_DB_DATABASE"
+              env:
+                - name: RDS_HOST
+                  value: "<RDS_ENDPOINT>"
+                - name: RDS_USER
+                  value: "<RDS_USERNAME>"
+                - name: RDS_DATABASE
+                  value: "aitravel"
+                - name: BACKUP_DB_HOST
+                  value: "<BACKUP_DB_HOST>"
+                - name: BACKUP_DB_PORT
+                  value: "3306"
+                - name: BACKUP_DB_USER
+                  value: "<BACKUP_DB_USERNAME>"
+                - name: BACKUP_DB_DATABASE
+                  value: "<BACKUP_DB_DATABASE>"
+                - name: RDS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-backup-secret
+                      key: rds-password
+                - name: BACKUP_DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-backup-secret
+                      key: backup-db-password
+          restartPolicy: OnFailure

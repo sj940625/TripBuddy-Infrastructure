@@ -1,0 +1,21 @@
+# Copy to terraform.tfvars and replace values for your environment.
+# terraform.tfvars is ignored by Git.
+
+aws_account_id           = "123456789012"
+rds_username             = "tripbuddy_admin"
+rds_password             = "CHANGE_ME"
+ec2_key_name             = "your-key-pair-name"
+admin_cidr                = "203.0.113.10/32"
+frontend_bucket_name      = "tripbuddy-frontend-your-unique-suffix"
+github_backend_repository = "your-org/backend"
+
+# Team-specific IAM principals are intentionally omitted from the repository.
+eks_admin_user_arns = []
+
+# Environment-specific ALB identifiers.
+public_alb_domain_name   = "public-alb.example.ap-northeast-2.elb.amazonaws.com"
+internal_alb_domain_name = "internal-alb.example.ap-northeast-2.elb.amazonaws.com"
+internal_alb_arn         = "arn:aws:elasticloadbalancing:ap-northeast-2:123456789012:loadbalancer/app/example/0123456789abcdef"
+
+# Optional migration inputs
+redis_ha_snapshot_name = null
