@@ -11,28 +11,10 @@ TripBuddy는 여행지, 일정, 인원, 예산과 취향을 입력하면 AI가 �
 
 ## 🏗 System Architecture
 
-```mermaid
-flowchart TB
-    U[User] --> CF[Amazon CloudFront + AWS WAF]
-    CF -->|Static assets| S3[Amazon S3]
-    CF -->|/api/*| VPCO[CloudFront VPC Origin]
-    VPCO --> ALB[Internal ALB]
-    ALB --> EKS[Amazon EKS]
+<p align="center">
+  <img src="docs/images/architecture.png" alt="TripBuddy Architecture" width="1000"/>
+</p>
 
-    EKS --> API[API Pod]
-    EKS --> WORKER[AI Worker Pod]
-    API --> RDS[(Amazon RDS MariaDB)]
-    API --> REDIS[(Amazon ElastiCache Redis)]
-    API --> SQS[Amazon SQS]
-    SQS --> WORKER
-    WORKER --> BR[Amazon Bedrock]
-
-    GHA[GitHub Actions OIDC] --> ECR[Amazon ECR]
-    J[Jenkins on Private EC2] --> ECR
-    ECR -->|Image pull| EKS
-
-    B[Bastion / SSM] --> J
-```
 
 ### 요청 흐름
 
