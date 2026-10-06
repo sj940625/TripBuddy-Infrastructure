@@ -7,6 +7,21 @@ TripBuddy는 여행지, 일정, 인원, 예산과 취향을 입력하면 AI가 �
 > **Public portfolio copy**  
 > 실제 프로젝트의 계정 ID, DB/Redis 엔드포인트, 팀원 IAM ARN, 비밀번호·JWT Secret 등 환경 고유값과 민감정보는 제거하거나 예시값/변수로 치환했습니다.
 
+## 📌 Project Info
+
+| 구분 | 내용 |
+|---|---|
+| 프로젝트 | TripBuddy |
+| 담당 역할 | AWS Infrastructure / DevOps |
+| Cloud | AWS (VPC, EKS, RDS, S3, CloudFront, SQS, ECR) |
+| IaC | Terraform |
+| Container | Docker / Kubernetes / Amazon EKS |
+| CI/CD | Jenkins / GitHub Actions |
+| Database | Amazon RDS for MariaDB |
+| Cache | Amazon ElastiCache for Redis |
+| Messaging | Amazon SQS |
+| AI | Amazon Bedrock |
+
 ---
 
 ## 🏗 System Architecture
